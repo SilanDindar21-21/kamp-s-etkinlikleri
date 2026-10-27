@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kampüs Etkinlikleri | Etkinlikler</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Etkinliklerimiz</h1>
+        <p>Sana uygun etkinliği bul ve kampüs hayatına katıl!</p>
+    </header>
+
+    <nav>
+        <a href="index.html">Ana Sayfa</a>
+        <a href="hakkimizda.html">Hakkımızda</a>
+        <a href="etkinlikler.html">Etkinlikler</a>
+    </nav>
+
+    <main>
+        <section class="icerik">
+            <h2>Etkinlik Ara</h2>
+
+            <input
+                type="text"
+                id="arama"
+                placeholder="Etkinlik adı ara..."
+                aria-label="Etkinlik adı ara"
+            >
+
+            <select id="kategori" aria-label="Kategori seç">
+                <option value="tumu">Tüm Kategoriler</option>
+                <option value="egitim">Eğitim</option>
+                <option value="sosyal">Sosyal</option>
+                <option value="spor">Spor</option>
+                <option value="kultur">Kültür</option>
+            </select>
+        </section>
+
+        <section class="kartlar" id="etkinlik-listesi">
+            <article class="kart etkinlik" data-kategori="egitim">
+                <h3>Web Tasarım Atölyesi</h3>
+                <p>Web geliştirme hakkında temel bilgiler öğren.</p>
+                <p><strong>Tarih:</strong> 5 Kasım 2026</p>
+                <p><strong>Kategori:</strong> Eğitim</p>
+            </article>
+
+            <article class="kart etkinlik" data-kategori="sosyal">
+                <h3>Kampüse Hoş Geldin Buluşması</h3>
+                <p>Yeni arkadaşlarla tanış ve kampüsü keşfet.</p>
+                <p><strong>Tarih:</strong> 8 Kasım 2026</p>
+                <p><strong>Kategori:</strong> Sosyal</p>
+            </article>
+
+            <article class="kart etkinlik" data-kategori="spor">
+                <h3>Üniversiteler Arası Voleybol</h3>
+                <p>Takım ruhunu destekle ve sporun keyfini çıkar.</p>
+                <p><strong>Tarih:</strong> 12 Kasım 2026</p>
+                <p><strong>Kategori:</strong> Spor</p>
+            </article>
+
+            <article class="kart etkinlik" data-kategori="kultur">
+                <h3>Kampüs Kültür ve Sanat Günü</h3>
+                <p>Müzik, sanat ve kültürel etkinliklerle buluş.</p>
+                <p><strong>Tarih:</strong> 15 Kasım 2026</p>
+                <p><strong>Kategori:</strong> Kültür</p>
+            </article>
+
+            <article class="kart etkinlik" data-kategori="egitim">
+                <h3>Kariyer Planlama Semineri</h3>
+                <p>Meslek seçimi ve kariyer hedefleri hakkında bilgi edin.</p>
+                <p><strong>Tarih:</strong> 20 Kasım 2026</p>
+                <p><strong>Kategori:</strong> Eğitim</p>
+            </article>
+        </section>
+
+        <p id="sonuc" role="status" aria-live="polite"></p>
+    </main>
+
+    <footer>
+        <p>©️ 2026 Kampüs Etkinlikleri</p>
+    </footer>
+
+    <script>
+        const arama = document.getElementById("arama");
+        const kategori = document.getElementById("kategori");
+        const etkinlikler = document.querySelectorAll(".etkinlik");
+        const sonuc = document.getElementById("sonuc");
+
+        function etkinlikleriFiltrele() {
+            const arananKelime = arama.value
+                .toLocaleLowerCase("tr-TR")
+                .trim();
+
+            const secilenKategori = kategori.value;
+            let gorunenEtkinlik = 0;
+
+            etkinlikler.forEach(function(etkinlik) {
+                const etkinlikMetni = etkinlik.textContent
+                    .toLocaleLowerCase("tr-TR");
+
+                const kelimeUyumu = etkinlikMetni.includes(arananKelime);
+                const kategoriUyumu =
+                    secilenKategori === "tumu" ||
+                    etkinlik.dataset.kategori === secilenKategori;
+
+                if (kelimeUyumu && kategoriUyumu) {
+                    etkinlik.hidden = false;
+                    gorunenEtkinlik++;
+                } else {
+                    etkinlik.hidden = true;
+                }
+            });
+
+            sonuc.textContent = gorunenEtkinlik === 0
+                ? "Aramanıza uygun etkinlik bulunamadı."
+                : gorunenEtkinlik + " etkinlik gösteriliyor.";
+        }
+
+        arama.addEventListener("input", etkinlikleriFiltrele);
+        kategori.addEventListener("change", etkinlikleriFiltrele);
+
+        etkinlikleriFiltrele();
+    </script>
+</body>
+</html>
